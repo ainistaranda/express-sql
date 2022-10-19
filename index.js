@@ -1,19 +1,10 @@
 import express from 'express'
-import pg from 'pg'
-import { creds } from './creds.js'
-
-const { Pool } = pg
+import { getAllCustomers, getCustomerById, addNewCustomer } from './src/customers.js'
 
 const app = express()
+app.use(express.json())
 
-
-app.get('/customers', async (req,res) => {
-    const pool = new Pool(creds)
-    const customers = await pool.query("SELECT * FROM customers", )
-        .catch(err => res.status(500).send(err))
-    res.send(customers.rows)
-    pool.end
-})
-
-
+app.get('/customers', getAllCustomers)
+app.get('/customers/:customerId', getCustomerById)
+app.post('/customers', addNewCustomer)
 app.listen(3030, () => console.log('Listening on http://localhost:3030...'))
